@@ -1,11 +1,16 @@
 package com.petproject.task;
 
+import com.petproject.custom.pagination.CustomPage;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletResponse;
+import javax.websocket.server.PathParam;
 import java.util.Optional;
 
 @RestController
@@ -16,8 +21,19 @@ public class TaskController {
     private TaskRepository taskRepository;
 
     @GetMapping
-    public Iterable<Task> getAll(HttpServletResponse response) {
-        return taskRepository.findAll();
+    @ResponseStatus(HttpStatus.OK)
+    public CustomPage<Task> getAll(
+        @PathParam("page") int page,
+        @PathParam("size") int size,
+        @PathParam("sort") Optional<String> sort,
+        @PathParam("direction") String direction
+    ) {
+        Pageable pageable = PageRequest.of(page, size, Sort.by(
+            direction.equals("desc") ? Sort.Direction.DESC : Sort.Direction.ASC,
+            sort.orElse("id")
+        ));
+
+        return new CustomPage<Task>(taskRepository.findAll(pageable));
     }
 
     @PostMapping
@@ -34,7 +50,7 @@ public class TaskController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Task> getById(@PathVariable(value = "id") Long id) {
+    public ResponseEntity<Task> getById(@PathVariable("id") Long id) {
         Optional<Task> maybeTask = taskRepository.findById(id);
 
         return maybeTask
@@ -43,7 +59,7 @@ public class TaskController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Object> deleteById(@PathVariable(value = "id") Long id) {
+    public ResponseEntity<Object> deleteById(@PathVariable("id") Long id) {
         Optional<com.petproject.task.Task> maybeTask = taskRepository.findById(id);
 
         return maybeTask
@@ -57,10 +73,8 @@ public class TaskController {
 
     @PutMapping("/{id}")
     public ResponseEntity<Task> editById(
-            @PathVariable(value = "id") Long id,
-            @RequestBody Task task
+        @PathVariable(value = "id") Long id, @RequestBody Task task
     ) {
-
         Optional<Task> taskOptional = taskRepository.findById(id);
 
         if (taskOptional.isPresent()) {
