@@ -5,7 +5,7 @@ public class CustomPageable {
     int number;
     Long totalElements;
 
-    public CustomPageable(int size, int number, Long totalElements) {
+    public CustomPageable(int number, int size, Long totalElements) {
         this.size = size;
         this.number = number;
         this.totalElements = totalElements;

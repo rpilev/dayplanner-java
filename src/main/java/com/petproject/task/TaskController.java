@@ -23,14 +23,14 @@ public class TaskController {
     @GetMapping
     @ResponseStatus(HttpStatus.OK)
     public CustomPage<Task> getAll(
-        @PathParam("page") int page,
-        @PathParam("size") int size,
-        @PathParam("sort") Optional<String> sort,
-        @PathParam("direction") String direction
+        @RequestParam(value = "page", defaultValue = "0") int page,
+        @RequestParam(value = "size", defaultValue = "5") int size,
+        @RequestParam(value = "sort", defaultValue = "id") String sort,
+        @RequestParam(value = "direction", defaultValue = "asc") String direction
     ) {
         Pageable pageable = PageRequest.of(page, size, Sort.by(
             direction.equals("desc") ? Sort.Direction.DESC : Sort.Direction.ASC,
-            sort.orElse("id")
+            sort
         ));
 
         return new CustomPage<Task>(taskRepository.findAll(pageable));
