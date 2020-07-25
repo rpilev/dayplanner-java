@@ -2,12 +2,12 @@ package com.petproject.custom.pagination;
 
 public class CustomPageable {
     int size;
-    int number;
+    int page;
     Long totalElements;
 
     public CustomPageable(int number, int size, Long totalElements) {
         this.size = size;
-        this.number = number;
+        this.page = number;
         this.totalElements = totalElements;
     }
 
@@ -19,12 +19,12 @@ public class CustomPageable {
         this.size = size;
     }
 
-    public int getNumber() {
-        return number;
+    public int getPage() {
+        return page;
     }
 
-    public void setNumber(int number) {
-        this.number = number;
+    public void setPage(int page) {
+        this.page = page;
     }
 
     public Long getTotalElements() {
