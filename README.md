@@ -1,8 +1,6 @@
-<h1>Pet Project Java Spring Boot</h1>
+<h1>Dayplanner</h1>
 
-This is a random Java development project intended for practice and learning.
-
-Built with Java 1.8 & Spring Boot
+This is a Java Spring Boot back-end for a day planner app.
 
 To run start: `com.petproject.PetprojectApplication`
 
